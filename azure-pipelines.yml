@@ -21,6 +21,7 @@ stages:
 
         - task: ArchiveFiles@2
           inputs:
+            rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
             includeRootFolder: false
             archiveType: 'zip'
             archiveFile: '$(Build.ArtifactStagingDirectory)/app.zip'
@@ -31,6 +32,6 @@ stages:
             azureSubscription: 'azsvc'
             appType: 'webAppLinux'
             appName: 'musicappindia'
-            package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+            package: '$(Build.ArtifactStagingDirectory)/*.zip'
             runtimeStack: 'PYTHON|3.13'
             startUpCommand: 'gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app'
