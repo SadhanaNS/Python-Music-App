@@ -17,6 +17,7 @@ stages:
 
         - script: |
               pip install -r requirements.txt
-              python main.py
-              echo $?
+              python main.py &
+              sleep 5
+              curl http://localhost:8000
           displayName: Install and Run App
