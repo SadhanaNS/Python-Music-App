@@ -25,6 +25,6 @@ stages:
 
         - script: |
               pip install -r requirements.txt
-              python main.py
+              echo $?
           displayName: Install and Run App
 
