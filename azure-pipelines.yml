@@ -18,17 +18,17 @@ stages:
         - script: |
               pip install -r requirements.txt
           displayName: Install Dependencies
-        
-        - script: |
-                 echo "===== Working Directory ====="
-                 pwd
-                 echo "===== Files in Working Directory ====="
-                 ls -R
-          displayName: Inspect working directory
 
+        - task: CopyFiles@2
+          inputs:
+              SourceFolder: '''$(System.DefaultWorkingDirectory)'''
+              Contents: |
+                main.py
+                requirements.txt
+              TargetFolder: '$(Build.ArtifactStagingDirectory)/app'
         - task: ArchiveFiles@2
           inputs:
-            rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+            rootFolderOrFile: '$(System.DefaultWorkingDirectory)/app'
             includeRootFolder: false
             archiveType: 'zip'
             archiveFile: '$(Build.ArtifactStagingDirectory)/app.zip'
