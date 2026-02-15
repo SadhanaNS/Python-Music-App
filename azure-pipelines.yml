@@ -17,10 +17,14 @@ stages:
     jobs:
       - job: run_py_app
         steps:
-          - task: PythonScript@0
-            inputs:
-              scriptSource: 'inline'
-              script: |
-                pip install -r requirement.txt
-                python main.py
+        - task: UsePythonVersion@0
+          inputs:
+            versionSpec: '3.x'
+            addToPath: true
+            architecture: 'x64'
+
+        - script: |
+              pip install -r requirements.txt
+              python main.py
+          displayName: Install and Run App
 
