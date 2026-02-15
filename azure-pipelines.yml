@@ -18,6 +18,13 @@ stages:
         - script: |
               pip install -r requirements.txt
           displayName: Install Dependencies
+        
+        - script: |
+                 echo "===== Working Directory ====="
+                 pwd
+                 echo "===== Files in Working Directory ====="
+                 ls -R
+          displayName: Inspect working directory
 
         - task: ArchiveFiles@2
           inputs:
@@ -26,6 +33,11 @@ stages:
             archiveType: 'zip'
             archiveFile: '$(Build.ArtifactStagingDirectory)/app.zip'
             replaceExistingArchive: true
+
+        - script: |
+             echo "===== Contents of app.zip ====="
+             unzip -l $(Build.ArtifactStagingDirectory)/app.zip
+          displayName: Inspect zip contents
 
         - task: AzureWebApp@1
           inputs:
