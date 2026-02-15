@@ -19,13 +19,12 @@ stages:
               pip install -r requirements.txt
           displayName: Install Dependencies
 
-        - task: ArchiveFiles@1
+        - task: ArchiveFiles@2
           inputs:
-                  rootFolder: '$(Build.BinariesDirectory)'
-                  includeRootFolder: true
-                  archiveType: 'default'
-                  archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-                  replaceExistingArchive: true
+            includeRootFolder: false
+            archiveType: 'zip'
+            archiveFile: '$(Build.ArtifactStagingDirectory)/app.zip'
+            replaceExistingArchive: true
 
         - task: AzureWebApp@1
           inputs:
@@ -34,4 +33,4 @@ stages:
             appName: 'musicappindia'
             package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
             runtimeStack: 'PYTHON|3.13'
-            startUpCommand: 'python main.py'
+            startUpCommand: 'gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app'
