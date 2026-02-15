@@ -1,10 +1,16 @@
 import html as html_module
 import json
 import httpx
+import os
+import uvicorn
 from fastapi import FastAPI, Query
 from fastapi.responses import HTMLResponse, Response
 
-app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
+app = FastAPI()
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port)
 
 # Base URL for sample audio (SoundHelix); we use track index % 16 + 1
 AUDIO_BASE = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-{}.mp3"
