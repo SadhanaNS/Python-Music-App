@@ -1,0 +1,26 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+pool:
+  vmImage: ubuntu-latest
+
+trigger:
+ branches:
+   include:
+     - dev
+
+stages:
+  - stage: build_app_dev      
+    displayName: Build Music app
+    jobs:
+      - job: run_py_app
+        steps:
+          - task: PythonScript@0
+            inputs:
+              scriptSource: 'inline'
+              script: |
+                pip install -r requirement.txt
+                python main.py
+
