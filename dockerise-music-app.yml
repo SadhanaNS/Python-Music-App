@@ -42,4 +42,10 @@ stages:
         Dockerfile: '**/Dockerfile'
         tags: '$(tag)'
 
-    - 
+    - task: SnykSecurityScan@1
+      inputs:
+        serviceConnectionEndpoint: 'snyksvccon'
+        testType: 'container'
+        dockerImageName: '$(containerRegistry)/$(imageRepository):$(tag)'
+        monitorWhen: 'always'
+        failOnIssues: true
