@@ -19,19 +19,32 @@ stages:
               pip install -r requirements.txt
           displayName: Install Dependencies
 
-        - task: ArchiveFiles@1
+        - task: CopyFiles@2
           inputs:
-                  rootFolder: '$(Build.BinariesDirectory)'
-                  includeRootFolder: true
-                  archiveType: 'default'
-                  archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-                  replaceExistingArchive: true
+              SourceFolder: '$(System.DefaultWorkingDirectory)'
+              Contents: |
+                main.py
+                requirements.txt
+              TargetFolder: '$(Build.ArtifactStagingDirectory)/app'
+        
+        - task: ArchiveFiles@2
+          inputs:
+            rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/app'
+            includeRootFolder: false
+            archiveType: 'zip'
+            archiveFile: '$(Build.ArtifactStagingDirectory)/app.zip'
+            replaceExistingArchive: true
+
+        - script: |
+             echo "===== Contents of app.zip ====="
+             unzip -l $(Build.ArtifactStagingDirectory)/app.zip
+          displayName: Inspect zip contents
 
         - task: AzureWebApp@1
           inputs:
             azureSubscription: 'azsvc'
             appType: 'webAppLinux'
             appName: 'musicappindia'
-            package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
-            runtimeStack: 'PYTHON|3.13'
-            startUpCommand: 'python main.py'
+            package: '$(Build.ArtifactStagingDirectory)/*.zip'
+            runtimeStack: 'PYTHON|3.11'
+            startUpCommand: 'gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:$PORT'
