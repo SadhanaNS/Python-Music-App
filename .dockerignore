@@ -1,0 +1,33 @@
+# Python virtual environments
+venv/
+.env/
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Git
+.git/
+.gitignore
+
+# Environment variables
+.env
+
+# IDE / editor junk
+.vscode/
+.idea/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Test / local files
+tests/
+*.log
+
+# Docker files you don't need inside image
+Dockerfile
+docker-compose.yml
